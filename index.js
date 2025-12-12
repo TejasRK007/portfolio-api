@@ -5,7 +5,6 @@ const app = express();
 
 /* ================= CONFIG ================= */
 
-// Render / hosting will inject PORT
 const PORT = process.env.PORT || 3001;
 
 /* ================= MIDDLEWARE ================= */
@@ -24,21 +23,46 @@ app.get("/", (req, res) => {
 const projects = [
   {
     id: 1,
-    title: "Personal Portfolio",
-    description: "Personal website built using React + Vite with a Node backend.",
-    tech: ["React", "Vite", "Node.js", "Express"],
+    title: "Visitor Management System (Mobile App)",
+    stack: "Flutter · Firebase · Cross-Platform",
+    description:
+      "A real-time visitor management mobile application that streamlines visitor onboarding, tracking, and access control using role-based workflows.",
+    highlights: [
+      "Multi-role access: Admin, Receptionist, Host, Guard",
+      "QR code based visitor check-in / check-out",
+      "Real-time updates using Firebase Firestore",
+      "Offline-first support with auto sync",
+    ],
+    tags: ["Flutter", "Firebase", "Mobile App"],
+    link: "https://github.com/TejasRK007/vms",
   },
   {
     id: 2,
-    title: "DSA Practice",
-    description: "Solved DSA problems across LeetCode and Codeforces.",
-    tech: ["C++", "STL", "Algorithms"],
+    title: "Stock Price Prediction Engine",
+    stack: "Python · Machine Learning · Data Analysis",
+    description:
+      "A machine learning-based stock prediction system built using historical market data to experiment with trend forecasting and predictive modeling.",
+    highlights: [
+      "Data preprocessing and feature extraction",
+      "Model experimentation for stock trend prediction",
+      "Modular ML pipeline for future improvements",
+    ],
+    tags: ["Python", "Machine Learning", "Time Series"],
+    link: "https://github.com/TejasRK007/stock_predictor",
   },
   {
     id: 3,
-    title: "Mini Projects",
-    description: "Small frontend and backend experiments for learning.",
-    tech: ["JavaScript", "CSS", "APIs"],
+    title: "Flutter Starter Application",
+    stack: "Flutter · Dart · Cross-Platform",
+    description:
+      "A starter Flutter project scaffold designed for rapid prototyping and learning cross-platform mobile application development.",
+    highlights: [
+      "Clean Flutter project structure",
+      "Cross-platform support (Android / iOS / Web)",
+      "Foundation for future mobile apps",
+    ],
+    tags: ["Flutter", "Dart", "Mobile UI"],
+    link: "https://github.com/TejasRK007/one2",
   },
 ];
 
@@ -97,8 +121,8 @@ async function fetchLeetCodeStats() {
   });
 
   const json = await res.json();
-
-  const stats = json?.data?.matchedUser?.submitStatsGlobal?.acSubmissionNum || [];
+  const stats =
+    json?.data?.matchedUser?.submitStatsGlobal?.acSubmissionNum || [];
 
   const parsed = {
     username: LEETCODE_USERNAME,
@@ -123,13 +147,11 @@ async function fetchCodeforcesStats() {
     `https://codeforces.com/api/user.info?handles=${CODEFORCES_HANDLE}`
   );
   const userData = await userRes.json();
-
   const user = userData.result[0];
 
   const submissionsRes = await fetch(
     `https://codeforces.com/api/user.status?handle=${CODEFORCES_HANDLE}`
   );
-
   const submissionsData = await submissionsRes.json();
   const subs = submissionsData.result || [];
 
@@ -140,7 +162,6 @@ async function fetchCodeforcesStats() {
     }
   });
 
-  // streak calculation
   const solvedDays = new Set();
   subs.forEach((s) => {
     if (s.verdict === "OK") {
@@ -155,9 +176,7 @@ async function fetchCodeforcesStats() {
     if (solvedDays.has(today.toDateString())) {
       streak++;
       today.setDate(today.getDate() - 1);
-    } else {
-      break;
-    }
+    } else break;
   }
 
   return {
@@ -177,10 +196,7 @@ app.get("/api/competitive-stats", async (req, res) => {
       fetchCodeforcesStats(),
     ]);
 
-    res.json({
-      leetcode,
-      codeforces,
-    });
+    res.json({ leetcode, codeforces });
   } catch (err) {
     console.error("Stats fetch failed:", err);
     res.status(500).json({ error: "Failed to fetch competitive stats" });
