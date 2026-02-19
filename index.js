@@ -91,7 +91,7 @@ app.post("/api/contact", (req, res) => {
 
 /* ================= COMPETITIVE STATS ================= */
 
-const LEETCODE_USERNAME = "tejasRkirigeri08";
+const LEETCODE_USERNAME = "Tejas_RK08";
 const CODEFORCES_HANDLE = "tejasrk1642006";
 
 async function fetchLeetCodeStats() {
